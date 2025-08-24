@@ -1,0 +1,37 @@
+### Common Aliases
+#####
+  alias lf='ls -F'
+  alias ll='ls -l'
+  alias la='ls -al'
+  alias lsd='ls -ld'
+  alias latr='ls -latr'
+  alias ltr='ls -ltr'
+  alias m='more'
+  alias l='less'
+  alias dfk='df -k'
+  alias dfl='df -kl'
+  alias h='history'
+  alias g='grep'
+  alias t='tail'
+  alias urlencode_jq='jq -sRr @uri'      # This is useful for encoding a strings that used in URL.
+  alias zdf='lsblk -ipo NAME,KNAME,PKNAME,TRAN,TYPE,FSTYPE,SIZE,MOUNTPOINT'
+  alias urlencode='python3 -c "import sys, urllib.parse as ul; print(ul.quote(sys.argv[1]))"'
+  alias urldecode='python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]))"'
+  alias urlencodeplus='python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]))"'
+  alias urldecodeplus='python3 -c "import sys, urllib.parse as ul; print(ul.unquote_plus(sys.argv[1]))"'
+ 
+  alias p='ps -ef'
+  alias pg='ps -ef|grep $@'
+  alias hg='history|grep $@'
+  alias ptree='pstree -pals $@'
+  alias ptreez='pstree -palsZ $@'
+  alias readcert='f() { ossl_args=""; if [ "$1" ]; then ossl_args="-in $1"; fi; openssl req -noout -text ${ossl_args} ; }; f'
+  alias readx509='f() { ossl_args=""; if [ "$1" ]; then ossl_args="-in $1"; fi; openssl x509 -noout -text  ${ossl_args}; } ; f'
+  alias readpkcs12='f() { ossl_args=""; if [ "$1" ]; then ossl_args="-in $1"; fi; openssl pkcs12 -nocerts -nodes ${ossl_args} ; }; f'
+  alias getcertsan='f() { openssl s_client -connect $1 2>/dev/null < /dev/null | openssl x509 -noout -text| grep DNS ; }; f'
+  alias getcert='f() { openssl s_client -connect $1 < /dev/null | openssl x509 -noout -text ; }; f'
+ 
+  alias ha="cat $HOME/.bash_history_${USER}.all"
+  alias hag="cat $HOME/.bash_history_${USER}.all|grep $@"
+ 
+  alias jqhelp='cat /mountpoint//USER/jq.txt'

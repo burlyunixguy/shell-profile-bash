@@ -1,0 +1,15 @@
+  ##############################################################################
+  #           Ansible aliases and functions
+  ##############################################################################
+  # Setup ansible environment only if we have ansible
+  which ansible >/dev/null 2>&1
+  ES=$?
+  if [ $ES -eq 0 ]; then
+    alias a='ansible'
+    alias ap='ansible-playbook'
+    alias apsc='ansible-playbook --syntax-check'
+    alias ad='ansible-doc'
+    alias ac='ansible-config'
+    alias av='ansible-vault'
+    alias ag='ansible-galaxy'
+  fi

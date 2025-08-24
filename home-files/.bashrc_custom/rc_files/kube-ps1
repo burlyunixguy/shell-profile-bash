@@ -1,0 +1,4 @@
+MYKUBEPS1=${BASHRC_ADDONS_ROOT}/my-kube-ps1.sh
+if [ -f $MYKUBEPS1 ] ; then
+  source $MYKUBEPS1 && echo "SOURCED $MYKUBEPS1" || echo "Failed to source $MYKUBEPS1"
+fi

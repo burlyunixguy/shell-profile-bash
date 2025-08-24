@@ -1,0 +1,13 @@
+  ##############################################################################
+  #           Tower aliases and functions
+  ##############################################################################
+  TOWERUSER=$USER
+  TOWER=awx.com
+  awxtoken() {
+   # Get authtoke value and id
+   while IFS== read key value; do
+     printf -v "$key" "$value"
+   done < <(curl -s -u ${TOWERUSER} -k -X POST -H "Content-type: application/json" -d '{"description":"Personal Tower CLI token", "application":null, "scope":"write"}' https://${TOWER}/api/v2/users/${TOWERUSER}/personal_tokens/|jq -r '{TOWERTOKEN_ID:.id,TOWERTOKEN_VALUE:.token}|to_entries|map("\(.key)=\(.value|tostring)")|.[]')
+  }
+  awxapi() { curl -s -k -H "Authorization: Bearer $TOWERTOKEN_VALUE" -H 'Content-Type: application/json' https://${TOWER}/api/v2/$@; }
+  awxtokendelete() { curl -k -H "Authorization: Bearer ${TOWERTOKEN_VALUE}" -X DELETE https://${TOWER}/api/v2/tokens/${TOWERTOKEN_ID}/  ; }

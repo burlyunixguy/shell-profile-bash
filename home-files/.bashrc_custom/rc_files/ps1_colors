@@ -1,0 +1,42 @@
+##############################################################################
+#### SET TitleBar and Prompt PS1 for ksh, bash, or zsh
+##############################################################################
+    #Set some Prompt Colors
+    black='\033[0;30m'
+    blue='\033[0;34m'
+    green='\033[0;32m'
+    cyan='\033[0;36m'
+    red='\033[0;31m'
+    purple='\033[0;35m'
+    brown='\033[0;33m'
+ 
+    lblack='\033[1;30m'
+    lblue='\033[1;34m'
+    lgreen='\033[1;32m'
+    lcyan='\033[1;36m'
+    lred='\033[1;31m'
+    lpurple='\133[0;35m'
+    lbrown='\133[0;33m'
+ 
+    bblack='\033[0;40m'
+    bblue='\033[0;44m'
+    bgreen='\033[0;42m'
+    bcyan='\033[0;46m'
+    bred='\033[0;41m'
+    bpurple='\033[0;45m'
+    bbrown='\033[0;43m'
+ 
+    bold='\033[1m'
+    normal='\033[0m'
+ 
+# Color Code
+# Substitute 0 with 1 for lighter color
+# Substitue 3 with 4 bold
+## Black        0;30
+## Blue 0;34
+## Green        0;32
+## Cyan 0;36
+## Red  0;31
+## Purple       0;35
+## Brown        0;33
+## Brown        0;33

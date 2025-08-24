@@ -1,0 +1,7 @@
+  ##############################################################################
+  #           MIQ aliases and functions
+  ##############################################################################
+  miqtoken() { export MIQTOKEN=$(curl -s --user USER  -X GET -H "Accept: application/json" https://miq/api/auth|jq -r '.auth_token') ; }
+  miqtokenui() { export MIQTOKEN=$(curl -s --user USER  -X GET -H "Accept: application/json" https://miq/api/auth?requester_type=ui|jq -r '.auth_token') ; }
+  miqtokendelete() { curl -s -X DELETE -H "X-Auth-Token: $MIQTOKEN" https://miq/api/auth; }
+  miqapi() { curl  -s -X GET -H "Accept: application/json" -H "X-Auth-Token: $MIQTOKEN" https://miq/api/$@; }

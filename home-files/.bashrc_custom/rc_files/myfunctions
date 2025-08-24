@@ -1,0 +1,34 @@
+###########
+## Functions
+###########
+ 
+    export NEWLINE=''
+    non()  { PS1="${PS1}\[\e[1;32m\]\n> \[\e[m\]"; }
+    noff() { PS1="$(echo $PS1 |sed 's#\\\[\\e\[1\;32m\\\]\\n.*##g')"; }
+ 
+    # Lower to Upper / Upper to Lower
+    l2u() { cat $1 | tr "[:lower:]" "[:upper:]"; }
+    u2l() { cat $1 | tr "[:upper:]" "[:lower:]"; }
+    # Put multiline output onto single line
+    sl() {
+      awk '/>>/ {printf "%s ", $0;next}1'
+    }
+ 
+ 
+    # function to rename a file..
+    old() {
+        for thisfile in $@;  do
+            if [ -f $thisfile ]; then
+            thisdate=`date +%Y%m%d_%H%M`
+            cp -p $thisfile $thisfile.$thisdate.$USER
+                ES=$?
+                if [ $ES -eq 0 ]; then
+                    echo "$thisfile copied to $thisfile.$thisdate.$USER"
+                else
+                    echo "FAILED: copy of $thisfile"
+                fi
+            else
+                echo "$thisfile not found!"
+            fi
+        done
+    }

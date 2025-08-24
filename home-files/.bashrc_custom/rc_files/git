@@ -1,0 +1,17 @@
+  ##############################################################################
+  #           Git aliases and functions
+  ##############################################################################
+  # Setup git environment only if we have git
+  which git >/dev/null 2>&1
+  ES=$?
+  if [ $ES -eq 0 ]; then
+    alias gitlog='git log --pretty=format:"%h - %an, %ar : %s" --abbrev=8'
+    alias gitlogdog='git log --decorate --oneline --graph --abbrev=8'
+    alias gitlogadog='git log --ancestry-path  --decorate --oneline --graph --abbrev=8'
+    alias gitsize='git count-objects -vH'
+
+    MYGITPROMPT=${BASHRC_ADDONS_ROOT}/gitprompt.sh
+    if [ -f $MYGITPROMPT ] ; then
+      source $MYGITPROMPT && echo "SOURCED $MYGITPROMPT" || echo "Failed to source $MYGITPROMPT"
+    fi
+  fi

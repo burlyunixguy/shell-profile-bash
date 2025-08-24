@@ -1,0 +1,6 @@
+  which helm >/dev/null 2>&1
+  ES=$?
+  if [ $ES -eq 0 ]; then
+    ## Setup HELM environment
+    export HELM_PLUGINS="/usr/local/share/helm/plugins:/home/$HOME/.local/share/helm/plugins"
+  fi

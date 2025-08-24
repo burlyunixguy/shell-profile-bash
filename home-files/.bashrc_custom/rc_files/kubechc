@@ -1,0 +1,4 @@
+MYKUBECHC=${BASHRC_ADDONS_ROOT}/kubechc/kubech
+if [ -f $MYKUBECHC ] ; then
+  source $MYKUBECHC && echo "SOURCED $MYKUBECHC" || echo "Failed to source $MYKUBECHC"
+fi

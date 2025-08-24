@@ -1,0 +1,74 @@
+##############################################################################
+#           K8s kubernetes aliases and functions
+##############################################################################
+  # Setup K8s environment only if we have kubectl
+  which kubectl >/dev/null 2>&1
+  ES=$?
+  if [ $ES -eq 0 ]; then
+    # Set to vi, nano or any other editor
+    KUBE_EDITOR=${EDITOR:vim}
+ 
+    # If you have different KUBECONFIGs, you can change KUBECONFIG to point to the one you want.
+    # alias apps-tst='export KUBECONFIG=$HOME/.kube/config.apps-tst && echo "sourcing apps-tst" && kubectl cluster-info && kubectl get nodes'
+    # alias apps-prd='export KUBECONFIG=$HOME/.kube/config.apps-prd && echo "sourcing apps-prd" && kubectl cluster-info && kubectl get nodes'
+    alias apps-tst='export KUBECONFIG=$HOME/.kube/config.apps-tst && echo "sourcing apps-tst" && kubectl cluster-info && kubectl get nodes'
+    alias apps-prd='export KUBECONFIG=$HOME/.kube/config.apps-prd && echo "sourcing apps-prd" && kubectl cluster-info && kubectl get nodes'
+    alias rke2-dev='export KUBECONFIG=$HOME/.kube/config.rke2dev-USER && echo "sourcing rke2dev" && kubectl cluster-info && kubectl get nodes'
+    #[ -f $HOME/.kube/config.all ] && export KUBECONFIG=$HOME/.kube/config.all && printf "\nK8S Clusters\n-----------------------\n" && kubectl config get-contexts
+    [ -f $HOME/.kube/config.all ] && export KUBECONFIG=$HOME/.kube/config.all
+ 
+ 
+    ## Aliases
+    alias k=kubectl
+    alias kd='kubectl describe $@'
+    alias kdp='kubectl describe pod $@'
+    alias kg='kubectl get $@'
+    alias kgn='kubectl get nodes $@'
+    alias kgp='kubectl get pods $@'
+    alias kgpw='kubectl get pods -o wide $@'
+    alias kgpl='kubectl get pods --show-labels $@'
+    alias kgpwl='kubectl get pods -o wide --show-labels $@'
+    alias kgd='kubectl get deployments $@'
+    alias kgs='kubectl get services $@'
+    alias kgt='kubectl get secrets $@'
+    alias kgc='kubectl get configmaps $@'
+    alias kgj='kubectl get jobs $@'
+    alias kg='kubectl get $@'
+#    alias kxm='f() { [ "$1" ] && kubectl config use-context $1 || kubectl config current-context ; } ; f'
+#    alias knm='f() { [ "$1" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d" " -f6 ; } ; f'
+    alias kc='kubechc'
+    alias kx='kubechc'
+#    alias kn='kubechn'
+#    alias kn='kubechn'
+    alias kn='f() { [ "$1" ] && kubectl get ns $1 >/dev/null 2>&1 && kubectl config set-context --current --namespace=$1 ; } ; f'
+    #kn() { kubectl config set-context --current --namespace=$@ ; }
+    alias knl='kubechn|egrep -v "^u-|^p-"'
+    alias kl='kubectl config get-contexts'
+    alias kon='kubeon'
+    alias koff='kubeon'
+ 
+    alias ktaint="f() { kubectl get nodes -o=custom-columns=NodeName:.metadata.name,TaintKey:.spec.taints[*].key,TaintValue:.spec.taints[*].value,TaintEffect:.spec.taints[*].effect ; }; f"
+ 
+ 
+    alias kshort="f() { kubectl api-resources | sed 's#[        ]\<[a-zA-Z0-9\.\-]\{1,\}/v[123].*\>[    ].*##g'|awk '{ if (NF==2) {print} }' ; }; f"
+ 
+    complete -F __start_kubectl k
+ 
+    ## Functions
+ 
+    kdimagelist() { kubectl get deployment $@ -o jsonpath='{range .items[*]}{.spec.template.spec.containers[].image}{"\n"}' | sort -u ; }
+    kdimagelistshort() { kubectl get deployment $@  -o jsonpath='{range .items[*]}{.spec.template.spec.containers[].image}{"\n"}' | sed -e 's/.*:[0-9]\{1,2\}443//g' -e 's/:.*//g' | sort -u; }
+    kpimagelist() { kubectl get pods $@ -o jsonpath='{range .items[*]}{.spec.containers[].image}{"\n"}'| sort -u; }
+    kpimagelistshort() { kubectl get pods $@  -o jsonpath='{range .items[*]}{.spec.containers[].image}{"\n"}'| sed -e 's/.*:[0-9]\{1,2\}443//g' -e 's/:[0-9].*//g'|sort -u; }
+    kit() { kubectl exec -it $@ -- bash ; }
+ 
+    kgetall() {   ns=$1; echo "Namespace: ${ns:=$kube_namespace}";  for i in $(kubectl api-resources --verbs=list --namespaced -o name | grep -v "events.events.k8s.io" | grep -v "events" | sort | uniq); do     echo "Resource:" $i;     kubectl -n ${ns:=$kube_namespace} get --ignore-not-found ${i};   done; }
+ 
+    ktestmappings() { kubectl get mappings.getambassador.io $@ -o custom-columns=Path:.spec.prefix --no-headers|xargs -t -n1 -I{} curl -nk https://emissary-ingress{}; }
+ 
+    ctr() { sudo /var/lib/rancher/rke2/bin/ctr --namespace k8s.io -a /run/k3s/containerd/containerd.sock $@ ; }
+ 
+ 
+ 
+  fi
+ 

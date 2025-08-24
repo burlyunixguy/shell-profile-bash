@@ -1,0 +1,29 @@
+##############################################################################
+#           K8s kubernetes aliases and functions
+##############################################################################
+  # Setup K8s environment only if we have kubectl
+  which kubectl >/dev/null 2>&1
+  ES=$?
+  if [ $ES -eq 0 ]; then
+ 
+    ctr() { sudo /var/lib/rancher/rke2/bin/ctr --namespace k8s.io -a /run/k3s/containerd/containerd.sock $@ ; }
+ 
+ 
+ 
+ 
+##############################################################################
+#           etcdctl aliases and functions
+##############################################################################
+ 
+   epod() { kubectl -n kube-system get pod -l component=etcd --no-headers -o custom-columns=NAME:.metadata.name ; }
+   ehelp() { for etcdpod in $(epod|head -1); do  kubectl -n kube-system exec -it $etcdpod --  bash -c "export ETCDCTL_ENDPOINTS='https://127.0.0.1:2379' ETCDCTL_CACERT='/var/lib/rancher/rke2/server/tls/etcd/server-ca.crt' ETCDCTL_CERT='/var/lib/rancher/rke2/server/tls/etcd/server-client.crt' ETCDCTL_KEY='/var/lib/rancher/rke2/server/tls/etcd/server-client.key' ETCDCTL_API=3 && etcdctl --help"; done ; }
+   ecomm() { TARGET=$1; shift 1; ECOMM="$@"; kubectl -n kube-system exec -it $TARGET --  bash -c "export ETCDCTL_ENDPOINTS='https://127.0.0.1:2379' ETCDCTL_CACERT='/var/lib/rancher/rke2/server/tls/etcd/server-ca.crt' ETCDCTL_CERT='/var/lib/rancher/rke2/server/tls/etcd/server-client.crt' ETCDCTL_KEY='/var/lib/rancher/rke2/server/tls/etcd/server-client.key' ETCDCTL_API=3 && etcdctl $ECOMM"; }
+   ecommall() { ECOMM="$@"; for etcdpod in $(epod); do [ -z $ETCD ] && echo $etcdpod ; kubectl -n kube-system exec -it $etcdpod --  bash -c "export ETCDCTL_ENDPOINTS='https://127.0.0.1:2379' ETCDCTL_CACERT='/var/lib/rancher/rke2/server/tls/etcd/server-ca.crt' ETCDCTL_CERT='/var/lib/rancher/rke2/server/tls/etcd/server-client.crt' ETCDCTL_KEY='/var/lib/rancher/rke2/server/tls/etcd/server-client.key' ETCDCTL_API=3 && etcdctl $ECOMM"; done; }
+ 
+   estats() { ecomm $1 get /registry --prefix --keys-only   | tr -d '\r'|grep -v ^$ | awk -F '/'  '{ h[$3]++ } END {for (k in h) print h[k], k}' | sort -nr ; }
+   estatsall() { for etcdpod in $(epod); do [ -z $ETCD ] && echo $etcdpod ;  ecomm $etcdpod get /registry --prefix --keys-only   | tr -d '\r' | grep -v ^$ | awk -F '/'  '{ h[$3]++ } END {for (k in h) print h[k], k}' | sort -nr ; echo; done; }
+ 
+   #eutl() { TARGET=$1; shift 1; ECOMM="$@"; kubectl -n kube-system exec -it $TARGET --  bash -c "export ETCDCTL_ENDPOINTS='https://127.0.0.1:2379' ETCDCTL_CACERT='/var/lib/rancher/rke2/server/tls/etcd/server-ca.crt' ETCDCTL_CERT='/var/lib/rancher/rke2/server/tls/etcd/server-client.crt' ETCDCTL_KEY='/var/lib/rancher/rke2/server/tls/etcd/server-client.key' ETCDCTL_API=3 && etcdutl $ECOMM"; }
+   #eutlall() { ECOMM="$@"; for etcdpod in $(epod); do [ -z $ETCD ] && echo $etcdpod ; kubectl -n kube-system exec -it $etcdpod --  bash -c "export ETCDCTL_ENDPOINTS='https://127.0.0.1:2379' ETCDCTL_CACERT='/var/lib/rancher/rke2/server/tls/etcd/server-ca.crt' ETCDCTL_CERT='/var/lib/rancher/rke2/server/tls/etcd/server-client.crt' ETCDCTL_KEY='/var/lib/rancher/rke2/server/tls/etcd/server-client.key' ETCDCTL_API=3 && etcdutl $ECOMM"; done; }
+
+  fi
