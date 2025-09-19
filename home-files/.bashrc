@@ -3,7 +3,7 @@
 ############
     export systemtype=`uname -s`
     case $systemtype in
-      Darwin|Linux)
+      Darwin) # For MAC.. want to move home to seperate location
         export HOME=$HOME/unix
       ;;
     esac
