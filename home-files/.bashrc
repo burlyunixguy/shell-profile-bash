@@ -111,10 +111,10 @@ done
  
     if [ "$MYID" = "0" ]; then  # root but can be anyone else
         TTLBR_PRX="## "    # Title Bar Prefix
-        PROMPT_SFX="#"     # Prompt Suffix
+        PROMPT_SFX="# "     # Prompt Suffix
     else
         TTLBR_PRX=">> "
-        PROMPT_SFX=">"
+        PROMPT_SFX="> "
     fi
     case "$CALLINGSHELL" in
       *bash*|*zsh*)
