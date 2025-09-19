@@ -1,8 +1,12 @@
 ############
 # Deteremine what type of system we are running on
 ############
-    export HOME=/users/dearlneal/unix
     export systemtype=`uname -s`
+    case $systemtype in
+      Darwin|Linux)
+        export HOME=$HOME/unix
+      ;;
+    esac
     export CALLINGSHELL="$0"
     export BASHRC_ADDONS=${HOME}/.bashrc_addons
     export BASHRC_CUSTOM=${HOME}/.bashrc_custom
