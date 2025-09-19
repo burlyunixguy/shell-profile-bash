@@ -1,0 +1,3 @@
+# bun
+export BUN_INSTALL="/users/dearlneal/unix/.bun"
+export PATH="${PATH}:${BUN_INSTALL}/bin"
