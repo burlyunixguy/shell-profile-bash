@@ -58,9 +58,9 @@ done
           #LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LD_LIBRARY_PATH_64
  
         ### Set some VARS
-          HN=`/usr//bin/uname -n`        # We use these for setting the prompt and titlebar
-          MYID=`/usr/bin/id -u`     # We use these for setting the prompt and titlebar
-          MYUN=`/usr/bin/id -un`    # We use these for setting the prompt and titlebar
+          HN=$(/usr//bin/uname -n|sed 's/\..*//g')   # Get short hostname
+          MYID=$(/usr/bin/id -u)     # We use these for setting the prompt and titlebar
+          MYUN=$(/usr/bin/id -un)    # We use these for setting the prompt and titlebar
  
  
           # If EDITOR is not set, use vi/vim for default editor.  User can override and use
@@ -127,7 +127,7 @@ done
         #PS1="\u@\H (\W) \!${PROMPT_SFX}${TITLEBAR}"
         #PS1=${TITLEBAR}'\e[1;32m\u\e[m@\e[1;33m\H\e[m \e[1;32m(\W)${PROMPT_SFX}\e[m'
         PS1=${TITLEBAR}'\[\e[1;32m\]\u@\H (\W)${PROMPT_SFX}\[\e[m\]'
-        PROMPT_COMMAND='echo -ne "\033]0;${TTLBR_PRX}${HN}: ${PWD}/\007"'
+        PROMPT_COMMAND='echo -ne "\033]0;${TTLBR_PRX}${HN}:($(basename $(PWD)))\007"'
       ;;
       *sh) # Only gets here if not bash or ksh
         case $TERM in
